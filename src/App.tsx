@@ -14,12 +14,18 @@ import { App as AntdApp } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 
 import { authProvider, dataProvider, liveProvider } from "./providers";
-import { Home, ForgotPassword, Login, Register, CompanyList } from "./pages";
+import {
+  Home,
+  ForgotPassword,
+  Login,
+  Register,
+  CompanyList,
+  List,
+} from "./pages";
 import Layout from "./components/layout";
 import { resources } from "./config/resources";
 import Create from "./pages/company/create";
 import EditPage from "./pages/company/edit";
-import List from "./pages/tasks/list";
 
 function App() {
   return (
@@ -66,7 +72,7 @@ function App() {
                     <Route path="edit/:id" element={<EditPage />} />
                   </Route>
                   <Route path="/tasks">
-                    <Route path="index" element={<List />} />
+                    <Route index element={<List />} />
                   </Route>
                 </Route>
               </Routes>
