@@ -9,12 +9,14 @@ import KanbanColumn from "@/components/tasks/kanban/column";
 import KanbanItem from "@/components/tasks/kanban/item";
 import { UPDATE_TASK_STAGE_MUTATION } from "@/graphql/mutations";
 import { TASKS_QUERY, TASK_STAGES_QUERY } from "@/graphql/queries";
-import { TaskStage } from "@/graphql/schema.types";
-import { TasksQuery } from "@/graphql/types";
+import { TaskStagesQuery, TasksQuery } from "@/graphql/types";
 import { DragEndEvent } from "@dnd-kit/core";
 import { useList, useNavigation, useUpdate } from "@refinedev/core";
 import { GetFieldsFromList } from "@refinedev/nestjs-query";
 import { useMemo } from "react";
+
+type Task = GetFieldsFromList<TasksQuery>;
+type TaskStage = GetFieldsFromList<TaskStagesQuery> & { tasks: Task[] };
 
 export const List = ({ children }: React.PropsWithChildren) => {
   const { replace } = useNavigation();
@@ -71,7 +73,7 @@ export const List = ({ children }: React.PropsWithChildren) => {
 
     const unassignedStage = tasks.data.filter((task) => task.stageId === null);
 
-    const grouped = stages.data.map((stage) => ({
+    const grouped: TaskStage[] = stages.data.map((stage) => ({
       ...stage,
       tasks: tasks.data.filter((task) => task.stageId?.toString() === stage.id),
     }));

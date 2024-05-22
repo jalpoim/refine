@@ -15,17 +15,22 @@ import {
 import { getDefaultFilter, useGo } from "@refinedev/core";
 import { Input, Space, Table } from "antd";
 import React from "react";
+import { GetFieldsFromList } from "@refinedev/nestjs-query";
 
 export const CompanyList = ({ children }: React.PropsWithChildren) => {
   const go = useGo();
-  const { tableProps, filters } = useTable({
+  const { tableProps, filters } = useTable<
+    GetFieldsFromList<CompaniesListQuery>,
+    HttpError,
+    GetFieldsFromList<CompaniesListQuery>
+  >({
     resource: "companies",
     onSearch: (values) => {
       return [
         {
           field: "name",
           operator: "contains",
-          value: (values as Company).name,
+          value: values.name,
         },
       ];
     },
