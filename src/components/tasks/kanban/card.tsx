@@ -1,5 +1,14 @@
 import { User } from "@/graphql/schema.types";
-import { Button, Card, ConfigProvider, Dropdown, Tag, theme } from "antd";
+import {
+  Button,
+  Card,
+  ConfigProvider,
+  Dropdown,
+  Space,
+  Tag,
+  Tooltip,
+  theme,
+} from "antd";
 import { Text } from "@/components/text";
 import { MenuProps } from "antd/lib";
 import {
@@ -8,10 +17,12 @@ import {
   EyeOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { TextIcon } from "@/components/text-icon";
 import dayjs from "dayjs";
 import { getDateColor } from "@/utilities";
+import CustomAvatar from "@/components/custom-avatar";
+import { useDelete, useNavigation } from "@refinedev/core";
 
 type ProjectCardProps = {
   id: string;
@@ -28,7 +39,8 @@ type ProjectCardProps = {
 const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
   const { token } = theme.useToken();
 
-  const edit = () => {};
+  const { edit } = useNavigation();
+  const { mutate } = useDelete();
 
   const dropdownItems = useMemo(() => {
     const dropdownItems: MenuProps["items"] = [
@@ -37,7 +49,7 @@ const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
         key: "1",
         icon: <EyeOutlined />,
         onClick: () => {
-          edit();
+          edit("tasks", id, "replace");
         },
       },
       {
@@ -45,12 +57,22 @@ const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
         label: "Delete card",
         icon: <DeleteOutlined />,
         key: "2",
-        onClick: () => {},
+        onClick: () => {
+          mutate({
+            resource: "tasks",
+            id,
+            meta: {
+              operation: "task",
+            },
+          });
+        },
       },
     ];
 
     return dropdownItems;
   }, []);
+
+  console.log(users);
 
   const dueDateOptions = useMemo(() => {
     if (!dueDate) return null;
@@ -81,12 +103,18 @@ const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
       <Card
         size="small"
         title={<Text ellipsis={{ tooltip: title }}>{title}</Text>}
-        onClick={() => edit()}
+        onClick={() => edit("tasks", id, "replace")}
         extra={
           <Dropdown
             trigger={["click"]}
             menu={{
               items: dropdownItems,
+              onPointerDown: (e) => {
+                e.stopPropagation();
+              },
+              onClick: (e) => {
+                e.domEvent.stopPropagation();
+              },
             }}
             placement="bottom"
             arrow={{ pointAtCenter: true }}
@@ -133,10 +161,39 @@ const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
               {dueDateOptions.text}
             </Tag>
           )}
+          {!!users?.length && (
+            <Space
+              size={4}
+              wrap
+              direction="horizontal"
+              align="center"
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginLeft: "auto",
+                marginRight: "0",
+              }}
+            >
+              {users.map((user) => {
+                <Tooltip key={user.id} title={user.name}>
+                  <CustomAvatar name={user.name} src={user.avatarUrl} />
+                </Tooltip>;
+              })}
+            </Space>
+          )}
         </div>
       </Card>
     </ConfigProvider>
   );
 };
 
-export default ProjectCard;
+export const ProjectCardMemo = memo(ProjectCard, (prev, next) => {
+  return (
+    prev.id === next.id &&
+    prev.title === next.title &&
+    prev.updatedAt === next.updatedAt &&
+    prev.dueDate === next.dueDate &&
+    prev.users?.length === next.users?.length &&
+    prev.updatedAt === next.updatedAt
+  );
+});

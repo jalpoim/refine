@@ -47,8 +47,10 @@ const LatestActivities = () => {
 
   return (
     <Card
-      headStyle={{ padding: "16px" }}
-      bodyStyle={{ padding: "0 1rem" }}
+      styles={{
+        header: { padding: "16px" },
+        body: { padding: "0 1rem" },
+      }}
       title={
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <UnorderedListOutlined />
