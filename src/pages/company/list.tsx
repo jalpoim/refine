@@ -12,10 +12,12 @@ import {
   List,
   useTable,
 } from "@refinedev/antd";
-import { getDefaultFilter, useGo } from "@refinedev/core";
+import { HttpError, getDefaultFilter, useGo } from "@refinedev/core";
 import { Input, Space, Table } from "antd";
 import React from "react";
 import { GetFieldsFromList } from "@refinedev/nestjs-query";
+import { CompaniesListQuery } from "@/graphql/types";
+import { ColumnProps } from "antd/lib/table";
 
 export const CompanyList = ({ children }: React.PropsWithChildren) => {
   const go = useGo();
@@ -86,7 +88,7 @@ export const CompanyList = ({ children }: React.PropsWithChildren) => {
             ...tableProps.pagination,
           }}
         >
-          <Table.Column<Company>
+          <Table.Column<ColumnProps<Company>>
             dataIndex="name"
             title="Company Title"
             defaultFilteredValue={getDefaultFilter("id", filters)}
@@ -107,7 +109,7 @@ export const CompanyList = ({ children }: React.PropsWithChildren) => {
               </Space>
             )}
           />
-          <Table.Column<Company>
+          <Table.Column<ColumnProps<Company>>
             dataIndex="totalRevenue"
             title="Open deals amount"
             render={(value, company) => (
@@ -116,7 +118,7 @@ export const CompanyList = ({ children }: React.PropsWithChildren) => {
               </Text>
             )}
           />
-          <Table.Column<Company>
+          <Table.Column<ColumnProps<Company>>
             dataIndex="id"
             title="Actions"
             fixed="right"
