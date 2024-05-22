@@ -1,7 +1,6 @@
 import CustomAvatar from "@/components/custom-avatar";
 import { Text } from "@/components/text";
 import { COMPANIES_LIST_QUERY } from "@/graphql/queries";
-import { Company } from "@/graphql/schema.types";
 import { SearchOutlined } from "@ant-design/icons";
 import { currencyNumber } from "@/utilities";
 import {
@@ -17,7 +16,8 @@ import { Input, Space, Table } from "antd";
 import React from "react";
 import { GetFieldsFromList } from "@refinedev/nestjs-query";
 import { CompaniesListQuery } from "@/graphql/types";
-import { ColumnProps } from "antd/lib/table";
+
+type Company = GetFieldsFromList<CompaniesListQuery>;
 
 export const CompanyList = ({ children }: React.PropsWithChildren) => {
   const go = useGo();
@@ -88,8 +88,8 @@ export const CompanyList = ({ children }: React.PropsWithChildren) => {
             ...tableProps.pagination,
           }}
         >
-          <Table.Column<ColumnProps<Company>>
-            dataIndex="name"
+          <Table.Column<Company>
+            dataIndex={"name"}
             title="Company Title"
             defaultFilteredValue={getDefaultFilter("id", filters)}
             filterIcon={<SearchOutlined />}
@@ -98,7 +98,7 @@ export const CompanyList = ({ children }: React.PropsWithChildren) => {
                 <Input placeholder="Search Company" />
               </FilterDropdown>
             )}
-            render={(value, record) => (
+            render={(_, record) => (
               <Space>
                 <CustomAvatar
                   shape="square"
@@ -109,17 +109,19 @@ export const CompanyList = ({ children }: React.PropsWithChildren) => {
               </Space>
             )}
           />
-          <Table.Column<ColumnProps<Company>>
-            dataIndex="totalRevenue"
+
+          <Table.Column<Company>
+            dataIndex={"totalRevenue"}
             title="Open deals amount"
-            render={(value, company) => (
+            render={(_, company) => (
               <Text>
                 {currencyNumber(company?.dealsAggregate?.[0].sum?.value || 0)}
               </Text>
             )}
           />
-          <Table.Column<ColumnProps<Company>>
-            dataIndex="id"
+
+          <Table.Column<Company>
+            dataIndex={"id"}
             title="Actions"
             fixed="right"
             render={(value) => (
