@@ -6,6 +6,8 @@
 </div>
 <br/>
 
+Check live demo [here](https://refine-2h88zn6r5-alpoimvcs-projects.vercel.app/)
+
 This [Refine](https://github.com/refinedev/refine) project was generated with [create refine-app](https://github.com/refinedev/refine/tree/master/packages/create-refine-app).
 
 ## Available Scripts
