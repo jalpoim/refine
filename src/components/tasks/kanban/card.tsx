@@ -70,7 +70,7 @@ const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
     ];
 
     return dropdownItems;
-  }, []);
+  }, [edit, id, mutate]);
 
   console.log(users);
 
@@ -174,11 +174,11 @@ const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
                 marginRight: "0",
               }}
             >
-              {users.map((user) => {
+              {users.map((user) => (
                 <Tooltip key={user.id} title={user.name}>
                   <CustomAvatar name={user.name} src={user.avatarUrl} />
-                </Tooltip>;
-              })}
+                </Tooltip>
+              ))}
             </Space>
           )}
         </div>

@@ -26,7 +26,6 @@ import Layout from "./components/layout";
 import { resources } from "./config/resources";
 import Create from "./pages/company/create";
 import EditPage from "./pages/company/edit";
-import CreateTask from "./pages/tasks/create";
 import TasksCreatePage from "./pages/tasks/create";
 import TasksEditPage from "./pages/tasks/edit";
 

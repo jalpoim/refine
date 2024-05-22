@@ -69,13 +69,11 @@ export const List = ({ children }: React.PropsWithChildren) => {
         stages: [],
       };
 
-    const unassignedStage = tasks?.data?.filter((task) => !task.stageId);
+    const unassignedStage = tasks.data.filter((task) => task.stageId === null);
 
-    const grouped: TaskStage[] = stages.data.map((stage) => ({
+    const grouped = stages.data.map((stage) => ({
       ...stage,
-      tasks: tasks?.data?.filter(
-        (task) => task.stageId?.toString() === stage.id
-      ),
+      tasks: tasks.data.filter((task) => task.stageId?.toString() === stage.id),
     }));
 
     return {
@@ -83,8 +81,6 @@ export const List = ({ children }: React.PropsWithChildren) => {
       columns: grouped,
     };
   }, [stages, tasks]);
-
-  console.log(tasks);
 
   const handleAddCard = (args: { stageId: string }) => {
     const path =
