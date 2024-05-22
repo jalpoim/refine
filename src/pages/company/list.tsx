@@ -25,7 +25,7 @@ export const CompanyList = ({ children }: React.PropsWithChildren) => {
         {
           field: "name",
           operator: "contains",
-          value: values.name,
+          value: (values as Company).name,
         },
       ];
     },
